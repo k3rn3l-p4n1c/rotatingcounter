@@ -87,3 +87,8 @@ func (c *Counter) start() {
 func (c *Counter) Stop() {
 	c.quitSignal <- true
 }
+
+func (c *Counter) Flush()  {
+	c.blocks = make([]uint64, len(c.blocks))
+	c.total = 0
+}

@@ -84,3 +84,22 @@ func BenchmarkCounter_Add_Blocking(b *testing.B) {
 
 	println(counter.Total())
 }
+
+func TestCounter_Flush(t *testing.T) {
+	resolution := 10 * time.Millisecond
+	counter := rotating.NewCounter(3*resolution, resolution, 0)
+	counter.Add(100)
+	time.Sleep(resolution)
+	counter.Add(100)
+
+	if counter.Total() != 200 {
+		println(counter.Total())
+		t.Fatal("wrong total number when rotation happen")
+	}
+
+	counter.Flush()
+	counter.Add(1)
+	if counter.Total() != 1 {
+		t.Fatal("wrong total number after flush")
+	}
+}
